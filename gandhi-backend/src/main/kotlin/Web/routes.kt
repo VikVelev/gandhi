@@ -1,15 +1,13 @@
 package Web
 
-import Data.ActivityEvent
-import Data.ActivityType
-import Data.MarketItem
-import Data.TimePeriod
+import Data.*
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.UserPasswordCredential
 import io.ktor.request.receive
 import io.ktor.response.respond
+import io.ktor.response.respondText
 import io.ktor.routing.*
 import org.apache.ignite.cache.query.ScanQuery
 import java.util.*
@@ -18,93 +16,48 @@ fun Application.routes() {
 
     install(Routing) {
 
-        /**
-         * A public login [Route] used to obtain JWTs
-         */
-        post("login") {
-            val credentials = call.receive<UserPasswordCredential>()
-//            val user = userSource.findUserByCredentials(credentials)
-//            val token = JwtConfig.makeToken(user)
-//            call.respondText(token)
-        }
-
+//        get("/top/{count}/{time?}") {
         get("/") {
-            call.respond(mapOf("OK" to true))
-            Database.activityEvents.addData(0, ActivityEvent(0, ActivityType.SWIMMING, Date(), 2))
-            Database.activityEvents.flush()
+
+            call.respond(DataStore.blocks.query(ScanQuery<Long, Block>()).map { it.value })
+
         }
 
-        get("/top/{count}/{time?}") {
-
-            if(call.parameters.contains("time")){
-                val time = call.parameters["time"]
-                call.respond(Database.Users.top(call.parameters["count"]!!.toInt(), TimePeriod.valueOf(time!!)))
-
-            }else{
-                call.respond(Database.Users.top(call.parameters["count"]!!.toInt()))
-
-            }
-        }
-
-        route("market") {
-            get {
-                println("getMarket")
-                call.respond( Database.market.query(ScanQuery<Int, MarketItem>()).map { it.value } )
-            }
+        route("blocks") {
 
             get("/{id}") {
-                call.respond( Database.market.get(call.parameters["id"]!!.toInt()) )
+
+                call.respond(DataStore.blocks.get(call.parameters["id"]!!.toLong()))
+            }
+
+            post("/submit") {
+                val block = call.receive<Block>()
+
+                block.number = DataStore.nextBlock()
+                block.timestamp = Date().time
+                DataStore.blocks.put(block.number, block);
+
+                call.respondText("post received")
 
             }
 
-            get("/{id}/buy") {
-                call.respond( Database.Market.buy( call.parameters["id"]!!.toInt(), 0 ) )
-            }
         }
 
-        get("/quest/{id}") {
-            call.respond( Database.quests.get(call.parameters["id"]!!.toInt()) )
-
-        }
-
-
-
-        route("users") {
+        route("balance") {
             get("/{id}") {
-                val userId = call.parameters["id"]!!.toInt()
-                call.respond( Database.users.get(call.parameters["id"]!!.toInt()) )
-
+                call.respond(DataStore.balances.get(call.parameters["id"]))
             }
 
-            get("/{id}/quests") {
-                val userId = call.parameters["id"]!!.toInt()
-                val count = call.request.queryParameters["count"]?.let{ it.toInt() } ?: 5
-
-                call.respond( Database.Quests.recommend(userId, count) ?: { mapOf("error" to "User not found") })
+            get("/") {
+                call.respond(DataStore.balances.query(ScanQuery<String, Long>()).map { Pair(it.key, it.value) } )
             }
+        }
 
-            get("/{id}/accept/{quest}") {
-                val userId = call.parameters["id"]!!.toInt()
-                val questId = call.parameters["quest"]!!.toInt()
-                call.respond( Database.Quests.accept(userId, questId) )
-
-            }
-
-            get("/top/{time?}") {
-                val count = call.request.queryParameters["count"]?.let{ it.toInt() } ?: 5
-
-                if(call.parameters.contains("time")){
-                    val time = call.parameters["time"]
-                    call.respond(Database.Users.top(count, TimePeriod.valueOf(time!!)))
-
-                }else{
-                    call.respond(Database.Users.top(count))
-
-                }
-            }
+        route("transactions") {
 
         }
 
+    }
 //        /**
 //         * All [Route]s in the authentication block are secured.
 //         */
@@ -134,4 +87,3 @@ fun Application.routes() {
 //            }
 //        }
     }
-}

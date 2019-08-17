@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nietzsche</groupId>
-    <artifactId>nietzsche</artifactId>
+    <artifactId>ghandi</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -78,11 +78,28 @@
             <version>${ktor.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.marcinmoskala</groupId>
+            <artifactId>DiscreteMathToolkit</artifactId>
+            <version>1.0.3</version>
+        </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>
+                    ${project.basedir}/src/main/resources
+                </directory>
+            </resource>
+        </resources>
 <!--        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>-->
         <plugins>
             <plugin>

@@ -1,0 +1,32 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * "gtrp" and "gtr" create a GET request with or without query parameters;
+# * "ptr" and "ptrp" create a POST request with a simple or parameter-like body;
+# * "mptr" and "fptr" create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST http://localhost:8080/blocks/submit
+Content-Type: application/json
+// data class Block(val number: Long, val timestamp: Date, val author: Address, val transactions: Map<Address, Transaction>)
+
+{
+  "number": 1,
+  "timestamp": "1566037695",
+  "author": "pesho",
+  "transactions": {
+    "pesho": {
+      "sender": "pesho",
+      "transfers": [
+        {
+          "address": "gosho",
+          "value": 12,
+          "state": 0
+        }
+      ]
+    }
+  }
+}
+
+###
+###
