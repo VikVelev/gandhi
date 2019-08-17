@@ -1,6 +1,5 @@
 package me.avo.io.ktor.auth.jwt.sample
 
-import Data.User
 import com.auth0.jwt.*
 import com.auth0.jwt.algorithms.*
 import java.util.*
@@ -17,20 +16,20 @@ object JwtConfig {
             .withIssuer(issuer)
             .build()
 
-    /**
-     * Produce a token for this combination of User and Account
-     */
-    fun makeToken(user: User): String = JWT.create()
-            .withSubject("Authentication")
-            .withIssuer(issuer)
-            .withClaim("id", user.id)
-//            .withArrayClaim("countries", user.countries.toTypedArray())
-            .withExpiresAt(getExpiration())
-            .sign(algorithm)
-
-    /**
-     * Calculate the expiration Date based on current time + the given validity
-     */
-    private fun getExpiration() = Date(System.currentTimeMillis() + validityInMs)
+//    /**
+//     * Produce a token for this combination of User and Account
+//     */
+//    fun makeToken(user: User): String = JWT.create()
+//            .withSubject("Authentication")
+//            .withIssuer(issuer)
+//            .withClaim("id", user.id)
+////            .withArrayClaim("countries", user.countries.toTypedArray())
+//            .withExpiresAt(getExpiration())
+//            .sign(algorithm)
+//
+//    /**
+//     * Calculate the expiration Date based on current time + the given validity
+//     */
+//    private fun getExpiration() = Date(System.currentTimeMillis() + validityInMs)
 
 }

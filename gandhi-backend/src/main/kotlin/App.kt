@@ -1,5 +1,4 @@
 
-import Data.User
 import Web.module
 import Web.routes
 import io.ktor.server.engine.embeddedServer
@@ -12,10 +11,6 @@ import java.util.*
 
 
 fun main() {
-    Database.listen()
-    println(Database.counter.query(ScanQuery<String, Int>()).map { "${it.key}: ${it.value}" })
 
-    Database.fake()
-    println(Database.counter.query(ScanQuery<String, Int>()).map { "${it.key}: ${it.value}" })
     embeddedServer(Netty, 8080) { module(); routes() }.start(true)
 }
