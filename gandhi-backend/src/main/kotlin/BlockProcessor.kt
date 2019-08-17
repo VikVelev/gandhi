@@ -3,6 +3,7 @@ import org.apache.ignite.services.Service
 import org.apache.ignite.services.ServiceContext
 import org.apache.ignite.Ignite
 import org.apache.ignite.IgniteQueue
+import org.apache.ignite.cache.query.ContinuousQuery
 import org.apache.ignite.configuration.CollectionConfiguration
 import org.apache.ignite.lang.IgniteFuture
 import org.apache.ignite.resources.IgniteInstanceResource
@@ -26,13 +27,8 @@ fun <V> IgniteFuture<V>.toCompletableFuture(): CompletableFuture<V> {
 
 class BlockProcessor : Service {
 
-	@IgniteInstanceResource
-	lateinit var ignite: Ignite
-
-	lateinit var queue: IgniteQueue<Block>
-
 	override fun init(ctx: ServiceContext?) {
-		queue = ignite.queue<Block>("PendingBlocks", 0, CollectionConfiguration())
+
 	}
 
 	override fun cancel(ctx: ServiceContext?) {
@@ -40,31 +36,40 @@ class BlockProcessor : Service {
 	}
 
 	override fun execute(ctx: ServiceContext?) {
-		while (!ctx!!.isCancelled) {
-			var block = queue.poll()
+		var query = ContinuousQuery<Long, Block>()
 
-			val results = CompletableFuture.allOf(
-				*block.transactions.map {
-					ignite.compute().affinityCallAsync(DataStore.balances.name, it.key) {
+		query.setLocalListener { list ->
+			list.forEach { pair ->
+				val block = pair.value
 
-						for (transfer in it.value.transfers) {
-							
-						}
-
-					}.toCompletableFuture()
-				}.toTypedArray()
-			)
+				val results = CompletableFuture.allOf(
+						*block.transactions.map {
+							DataStore.ignite.compute().affinityCallAsync(DataStore.balances.name, it.key) {
+								var current = DataStore.balances.get(it.key)
 
 
 
-			println("Block: ${block.number}")
+								for (transfer in it.value.transfers) {
+									if( block.transactions.containsKey(transfer.address) ) {
+										continue
+									}
 
+									if(current >= transfer.value) {
+										current -= transfer.value
 
+									}else{
+										break
+									}
+								}
+
+								println("Transaction: ${it.key}")
+							}.toCompletableFuture()
+						}.toTypedArray()
+				)
+
+			}
 		}
-	}
 
-	fun addBlock(block: Block) {
-		queue.put(block)
+		DataStore.blocks.query(query)
 	}
-
 }

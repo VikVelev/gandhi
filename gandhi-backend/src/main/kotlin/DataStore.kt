@@ -23,7 +23,7 @@ object DataStore {
         ignite.cluster().active(true)
     }
 
-    var blocks: IgniteCache<Int, Block> = ignite.getOrCreateCache("Blocks")
+    var blocks: IgniteCache<Long, Block> = ignite.getOrCreateCache("Blocks")
 
     var senders: IgniteCache<Pair<Long, BigInteger>, Boolean> = ignite.getOrCreateCache("Senders")
 
