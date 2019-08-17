@@ -17,11 +17,11 @@ class Navbar extends Component {
         
         return (
             <Menu inverted>
-                <Menu.Header
+                {/* <Menu.Header
                     // position='left'
                     disabled
                     content="GANDHI"
-                />
+                /> */}
 
                 <Menu.Item
                     // position='left'

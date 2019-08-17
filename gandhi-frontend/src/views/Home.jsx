@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Input, Button, Dropdown, Divider, Modal, Image, Header } from 'semantic-ui-react';
-import SuccessModal from '../components/SuccessModal'
 
 // import { Participants } from '../components/Participants'
 
