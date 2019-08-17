@@ -1,1 +1,1 @@
-# gandhi
+# Gandhi - A Scalable Finance Infrastructure
