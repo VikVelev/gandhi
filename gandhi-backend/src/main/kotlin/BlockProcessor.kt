@@ -10,6 +10,7 @@ import org.apache.ignite.lang.IgniteFuture
 import org.apache.ignite.resources.IgniteInstanceResource
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 
 fun <V> IgniteFuture<V>.toCompletableFuture(): CompletableFuture<V> {
@@ -40,6 +41,8 @@ class BlockProcessor : Service {
 		var query = ContinuousQuery<Long, Block>()
 
 		query.setLocalListener { list ->
+			var time = System.nanoTime()
+
 			list.forEach { pair ->
 				val block = pair.value
 
@@ -78,7 +81,9 @@ class BlockProcessor : Service {
 						}.toCompletableFuture()
 					}.toTypedArray()
 				)
-				println("Block: ${block.number}")
+
+
+				println("Block: ${block.number}\n Elapsed time: ${(System.nanoTime() - time) / 1000000.0 }")
 
 			}
 		}

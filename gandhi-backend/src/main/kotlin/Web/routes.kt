@@ -33,7 +33,8 @@ fun Application.routes() {
             post("/submit") {
                 val block = call.receive<Block>()
 
-
+                block.number = DataStore.nextBlock()
+                block.timestamp = Date().time
                 DataStore.blocks.put(block.number, block);
 
                 call.respondText("post received")

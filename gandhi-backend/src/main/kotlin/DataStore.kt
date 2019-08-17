@@ -19,6 +19,11 @@ object DataStore {
 //        dataStorageConfiguration.defaultDataRegionConfiguration.setPersistenceEnabled(true)
     })
 
+    var counter = ignite.atomicLong("Counter", 0, true)
+    fun nextBlock(): Long {
+        return counter.andIncrement
+    }
+
     init {
         ignite.cluster().active(true)
     }
