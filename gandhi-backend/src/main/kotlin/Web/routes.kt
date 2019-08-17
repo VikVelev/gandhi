@@ -47,6 +47,8 @@ fun Application.routes() {
 
             post("/submit") {
                 val block = call.receive<Block>()
+				println("block: $block")
+
 
                 block.number = DataStore.nextBlock()
                 block.timestamp = Date().time

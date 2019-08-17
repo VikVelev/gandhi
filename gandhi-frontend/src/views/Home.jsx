@@ -45,6 +45,7 @@ const friendOptions = [
 function parseBlock(block) {
 
     let parsedBlock = {}
+    let transactions = {}
     block.forEach((tx) => {
         console.log(tx)
         let transfer = {
@@ -59,6 +60,10 @@ function parseBlock(block) {
 
         parsedBlock = {"timestamp": 0, "number": 0, "author": tx.from, "transactions": transactions}
     })
+    
+    console.log(transactions)
+    parsedBlock = {"timestamp": 0, "number": 0, "author": "user1", transactions}
+    console.log("parsedBlock: ", parsedBlock)
 
     return parsedBlock
 }
@@ -130,9 +135,10 @@ class Home extends Component {
         
         //Send query here
         console.log(block)
-
+        let send = parseBlock(block.transactions)
+        console.log("Send: ", send)
         //Enable the modal
-        axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block.transactions)).then(
+        axios.post('http://127.0.0.1:8080/blocks/submit', send).then(
             (res) => {
                 console.log(`status: ${res.status}`)
                 this.show('blurring')()
