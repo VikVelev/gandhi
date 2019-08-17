@@ -11,6 +11,6 @@ import java.util.*
 
 
 fun main() {
-
+    println("IgniteVersion: ${DataStore.ignite.version()}")
     embeddedServer(Netty, 8080) { module(); routes() }.start(true)
 }

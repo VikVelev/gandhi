@@ -78,11 +78,24 @@
             <version>${ktor.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>
+                    ${project.basedir}/src/main/resources
+                </directory>
+            </resource>
+        </resources>
 <!--        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>-->
         <plugins>
             <plugin>
