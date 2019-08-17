@@ -1,11 +1,11 @@
 const axios = require('axios')
 
-NUM_ACCOUNTS=10000
+NUM_ACCOUNTS=50
 
 block_number=0
 
 function transfers_to_transactions(transfers, sender) {
-	return {sender: { "sender": sender, "transfers": transfers } }
+	return {[sender]: { "sender": sender, "transfers": transfers } }
 }
 
 function transactions_to_block(transactions) {
@@ -15,7 +15,7 @@ function transactions_to_block(transactions) {
 function pesho_to_all() {
 	transfers = []
 	for(i=0; i<NUM_ACCOUNTS; i++) {
-		transfers.push({"address": "ACCOUNT"+i, "value": 10, "state": 0})
+		transfers.push({"address": "ACCOUNT"+i, "value": 1, "state": 0})
 	}
 
 	return transactions_to_block(transfers_to_transactions(transfers, "pesho"))
