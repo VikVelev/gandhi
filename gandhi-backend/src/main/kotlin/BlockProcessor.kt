@@ -1,4 +1,5 @@
 import Data.Block
+import Data.TransferState
 import org.apache.ignite.services.Service
 import org.apache.ignite.services.ServiceContext
 import org.apache.ignite.Ignite
@@ -43,28 +44,29 @@ class BlockProcessor : Service {
 				val block = pair.value
 
 				val results = CompletableFuture.allOf(
-						*block.transactions.map {
-							DataStore.ignite.compute().affinityCallAsync(DataStore.balances.name, it.key) {
-								var current = DataStore.balances.get(it.key)
+					*block.transactions.map {
+						DataStore.ignite.compute().affinityCallAsync(DataStore.balances.name, it.key) {
+							var current = DataStore.balances.get(it.key)
 
-
-
-								for (transfer in it.value.transfers) {
-									if( block.transactions.containsKey(transfer.address) ) {
-										continue
-									}
-
-									if(current >= transfer.value) {
-										current -= transfer.value
-
-									}else{
-										break
-									}
+							for (transfer in it.value.transfers) {
+								if( block.transactions.containsKey(transfer.address) ) {
+//									transfer.state = TransferState.Failed
+									continue
 								}
 
-								println("Transaction: ${it.key}")
-							}.toCompletableFuture()
-						}.toTypedArray()
+								if(current >= transfer.value) {
+									current -= transfer.value
+
+								}else{
+//									transfer.state = TransferState.Failed
+									break;
+								}
+							}
+
+
+							println("Transaction: ${it.key}")
+						}.toCompletableFuture()
+					}.toTypedArray()
 				)
 
 			}
