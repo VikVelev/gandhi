@@ -42,6 +42,12 @@ fun Application.routes() {
 
         }
 
+        route("balance") {
+            get("/{id}") {
+                call.respond(DataStore.balances.get(call.parameters["id"]))
+            }
+        }
+
     }
 //        /**
 //         * All [Route]s in the authentication block are secured.
