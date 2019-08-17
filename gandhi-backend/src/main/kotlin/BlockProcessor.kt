@@ -45,6 +45,7 @@ class BlockProcessor : Service {
 
 			list.forEach { pair ->
 				val block = pair.value
+				println("Block: ${block.number}")
 
 				val results = CompletableFuture.allOf(
 					*block.transactions.map {
@@ -77,13 +78,13 @@ class BlockProcessor : Service {
 							}
 
 							DataStore.balances.put(it.key, current)
-							println("Transaction: ${it.key}")
+//							println("Transaction: ${it.key}")
 						}.toCompletableFuture()
 					}.toTypedArray()
 				)
 
 
-				println("Block: ${block.number}\n Elapsed time: ${(System.nanoTime() - time) / 1000000.0 }")
+				println(" Elapsed time: ${(System.nanoTime() - time) / 1000000.0 }")
 
 			}
 		}
