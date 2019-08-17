@@ -9,8 +9,8 @@ enum class TransferState {
 }
 
 data class Transfer(
-	val address: Address,
+	val address: String,
 	val value: BigInteger,
 	var state: TransferState
 )
-data class Transaction(val sender: Address, val transfers: List<Transfer>, val blockNumber: Int)
+data class Transaction(val sender: String, val transfers: List<Transfer>, val blockNumber: Int)

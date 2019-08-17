@@ -27,7 +27,7 @@ object DataStore {
 
     var senders: IgniteCache<Pair<Long, BigInteger>, Boolean> = ignite.getOrCreateCache("Senders")
 
-    var balances: IgniteCache<Address, BigInteger> = ignite.getOrCreateCache("Balances")
+    var balances: IgniteCache<String, BigInteger> = ignite.getOrCreateCache("Balances")
 
 
 
