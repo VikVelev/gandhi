@@ -42,27 +42,25 @@ const friendOptions = [
     },
 ]
 
-
-
-function transfers_to_transactions(transfers, sender) {
-    return {[sender]: { "sender": sender, "transfers": transfers } }
-}
-
-function transactions_to_block(transactions) {
-    return {"timestamp": 0, "number": 0, "author": "pesho", "transactions": transactions}
-}
-
-function pesho_to_all(num_of_accounts) {
-    let transfers = []
-    for(let i=0; i<num_of_accounts; i++) {
-        transfers.push({"address": "ACCOUNT"+i, "value": 1, "state": 0})
-    }
-
-    return transactions_to_block(transfers_to_transactions(transfers, "pesho"))
-}
-
 function parseBlock(block) {
 
+    let parsedBlock = {}
+    block.forEach((tx) => {
+        let transfer = {
+            "address": tx.to,
+            "value": tx.amount
+        }
+
+        let transactions = [{ [tx.from]:{
+            "sender": tx.from,
+            "transfers": transfer,
+
+        }}]
+
+        parsedBlock = {"timestamp": 0, "number": 0, "author": tx.from, "transactions": transactions}
+    })
+
+    return parsedBlock
 }
 
 class Home extends Component {
@@ -134,14 +132,13 @@ class Home extends Component {
         console.log(block)
 
         //Enable the modal
-        axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block)).then(
+        axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block.transactions)).then(
             (res) => {
                 console.log(`statusCode: ${res.statusCode}`)
                 this.show('blurring')()
         }).catch((error) => {
             console.error(error)
         })
-        
     }
 
     render() {
