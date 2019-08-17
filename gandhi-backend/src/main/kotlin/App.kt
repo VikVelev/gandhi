@@ -98,7 +98,22 @@ fun main() {
             testB()
         }
     }
-    println("   Elapsed time: ${(System.nanoTime() - t) / 1000000.0 }")
+
+    var result1 = (System.nanoTime() - t) / 1000000.0
+
+    var m = System.nanoTime()
+    for(i in 0 .. 60) {
+        if(i % 2 == 0) {
+            testA()
+        }else{
+            testB()
+        }
+    }
+
+    var result2 = (System.nanoTime() - m) / 1000000.0
+
+    println("Elapsed time for Single: $m")
+    println("Elapsed time for Single: $m")
 
 
     embeddedServer(Netty, 8080) { module(); routes() }.start(wait = false)

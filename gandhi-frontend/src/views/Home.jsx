@@ -45,6 +45,7 @@ const friendOptions = [
 function parseBlock(block) {
 
     let parsedBlock = {}
+    let transactions = []
     block.forEach((tx) => {
         console.log(tx)
         let transfer = [{
@@ -52,14 +53,15 @@ function parseBlock(block) {
             "value": parseInt(tx.amount)
         }]
 
-        let transactions = { [tx.from]:{
+        transactions[tx.from] = {
             "sender": tx.from,
             "transfers": transfer
-        }}
+        }
 
-        parsedBlock = {"timestamp": 0, "number": 0, "author": tx.from, "transactions": transactions}
     })
-
+    
+    console.log(transactions)
+    parsedBlock = {"timestamp": 0, "number": 0, "author": "user1", "transactions": transactions}
     return parsedBlock
 }
 
@@ -134,7 +136,7 @@ class Home extends Component {
         //Enable the modal
         axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block.transactions)).then(
             (res) => {
-                console.log(`statusCode: ${res.statusCode}`)
+                console.log(res)
                 this.show('blurring')()
         }).catch((error) => {
             console.error(error)
@@ -172,10 +174,11 @@ class Home extends Component {
                     $
                     <Input 
                         className="amount item-el"
-                        onChange={this.handleChange}
                         name="transaction_one_amount"
                         placeholder="$"
-                        value={this.state.transaction_one_amount}
+                        onChange={this.handleChange}
+                        input={this.state.transaction_one_amount}
+                        // value={this.state.transaction_one_amount}
                     />
                     {/* <Button type="button" className="close" icon="close" circular onClick={this.onClickClose.bind(this)}/> */}
                     <Divider/>                
