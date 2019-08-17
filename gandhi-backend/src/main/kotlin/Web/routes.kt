@@ -46,6 +46,14 @@ fun Application.routes() {
             get("/{id}") {
                 call.respond(DataStore.balances.get(call.parameters["id"]))
             }
+
+            get("/") {
+                call.respond(DataStore.balances.query(ScanQuery<String, Long>()).map { Pair(it.key, it.value) } )
+            }
+        }
+
+        route("transactions") {
+
         }
 
     }
