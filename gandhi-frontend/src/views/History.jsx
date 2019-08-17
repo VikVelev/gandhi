@@ -10,7 +10,7 @@ class History extends Component {
                 to: "Dimo",
                 to_address: "0x41231fhgd",
                 amount: 15.2
-            }, 
+            },
             {
                 from: "Pesho",
                 from_address: "0x123asd123123",

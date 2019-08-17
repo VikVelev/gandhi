@@ -21,7 +21,7 @@ const friendOptions = [
       text: 'Stevie Feliciano',
       value: 'Stevie Feliciano',
       icon: 'user',
-  },
+    },
     {
       key: 'Christian',
       text: 'Christian',

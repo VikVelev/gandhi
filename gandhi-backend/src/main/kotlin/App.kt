@@ -91,15 +91,15 @@ fun main() {
 //
 //    }
 
-    var t = System.nanoTime()
-    for(i in 0 .. 60) {
-        if(i % 2 == 0) {
-            testA()
-        }else{
-            testB()
-        }
-    }
-    println("   Elapsed time: ${(System.nanoTime() - t) / 1000000.0 }")
+//    var t = System.nanoTime()
+//    for(i in 0 .. 60) {
+//        if(i % 2 == 0) {
+//            testA()
+//        }else{
+//            testB()
+//        }
+//    }
+//    println("   Elapsed time: ${(System.nanoTime() - t) / 1000000.0 }")
 
 //    t = System.nanoTime()
 //    for(i in 0 .. (50 * 500)) {
