@@ -68,13 +68,12 @@ class BlockProcessor : Service {
 									}
 
 								}else{
-									DataStore.balances.put(it.key, current)
-
 //									transfer.state = TransferState.Failed
 									break;
 								}
 							}
 
+							DataStore.balances.put(it.key, current)
 							println("Transaction: ${it.key}")
 						}.toCompletableFuture()
 					}.toTypedArray()
