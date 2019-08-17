@@ -62,7 +62,7 @@ function pesho_to_all(num_of_accounts) {
 }
 
 function parseBlock(block) {
-    
+
 }
 
 class Home extends Component {
@@ -137,12 +137,11 @@ class Home extends Component {
         axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block)).then(
             (res) => {
                 console.log(`statusCode: ${res.statusCode}`)
-                console.log(res)
+                this.show('blurring')()
         }).catch((error) => {
             console.error(error)
         })
-
-        this.show('blurring')()
+        
     }
 
     render() {
