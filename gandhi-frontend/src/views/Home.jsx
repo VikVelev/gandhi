@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Button, Dropdown, Divider } from 'semantic-ui-react';
+import { Input, Button, Dropdown, Divider, Modal, Image, Header } from 'semantic-ui-react';
+import SuccessModal from '../components/SuccessModal'
 
 // import { Participants } from '../components/Participants'
 
@@ -69,6 +70,11 @@ class Home extends Component {
         this.setState({ [name] : value })
 	}
 
+    state = { open: false }
+
+    show = dimmer => () => this.setState({ dimmer, open: true })
+    close = () => this.setState({ open: false })
+
     onResolve() {
         this.setState({ sum: (
                 parseFloat(this.state.transaction_one_amount) + 
@@ -77,28 +83,27 @@ class Home extends Component {
             )
         })
         
-        console.log(this.state.sum)
         let block = {
             transactions: [
                 {
                     from: this.state.transaction_one_from_name,
-                    from_address: this.state.transaction_one_from_address,
+                    //from_address: this.state.transaction_one_from_address,
                     to: this.state.transaction_one_to_name,
-                    to_address: this.state.transaction_one_to_address,
+                    //to_address: this.state.transaction_one_to_address,
                     amount: this.state.transaction_one_amount
                 },
                 {
                     from: this.state.transaction_two_from_name,
-                    from_address: this.state.transaction_two_from_address,
+                    //from_address: this.state.transaction_two_from_address,
                     to: this.state.transaction_two_to_name,
-                    to_address: this.state.transaction_two_to_address,
+                    //to_address: this.state.transaction_two_to_address,
                     amount: this.state.transaction_two_amount
                 },
                 {
                     from: this.state.transaction_three_from_name,
-                    from_address: this.state.transaction_three_from_address,
+                    //from_address: this.state.transaction_three_from_address,
                     to: this.state.transaction_three_to_name,
-                    to_address: this.state.transaction_three_to_address,
+                    //to_address: this.state.transaction_three_to_address,
                     amount: this.state.transaction_three_amount
                 },
             ],
@@ -106,15 +111,20 @@ class Home extends Component {
         
         //Send query here
         console.log(block)
+
+        //Enable the modal
+        this.show('blurring')()
     }
 
     render() {
+        const { open, dimmer } = this.state
+
         return (
             <div className="home">
                 <div className="list-item">
                     From:
                     <Dropdown
-                        className="sender item-el" 
+                        className="sender item-el"
                         placeholder="Select a sender 1" 
                         fluid 
                         selection 
@@ -220,6 +230,25 @@ class Home extends Component {
                     type="submit">
                         Resolve Payment
                 </Button>
+
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Response</Modal.Header>
+                    <Modal.Content image>
+                        <Modal.Description>
+                            <Header>Transactions Processed Successfully
+                            </Header>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button
+                            positive
+                            icon='checkmark'
+                            labelPosition='right'
+                            content="Awesome"
+                            onClick={this.close}
+                        />
+                    </Modal.Actions>
+                </Modal>
             </div>
         );
     }

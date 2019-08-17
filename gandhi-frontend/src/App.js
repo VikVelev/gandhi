@@ -17,7 +17,6 @@ function App() {
 				<Navbar/>
 				<Route path="/" exact component={Home} />
 				<Route path="/history/" component={History} />
-				<Route path="/friends/" component={Friends} />
 			</div>
     	</Router>
 	);

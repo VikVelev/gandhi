@@ -7,7 +7,7 @@ import "./Navbar.css"
 class Navbar extends Component {
     
     state = {
-        activeItem: 'home'
+        activeItem: window.history.stat
     }
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
@@ -17,6 +17,12 @@ class Navbar extends Component {
         
         return (
             <Menu inverted>
+                <Menu.Header
+                    // position='left'
+                    disabled
+                    content="GANDHI"
+                />
+
                 <Menu.Item
                     // position='left'
                     as={Link}
@@ -34,13 +40,13 @@ class Navbar extends Component {
                     onClick={this.handleItemClick}
                 />
 
-                <Menu.Item
+                {/* <Menu.Item
                     as={Link}
                     to="/friends"
                     name='friends'
                     active={activeItem === 'friends'}
                     onClick={this.handleItemClick}
-                />
+                /> */}
           </Menu>
         );
     }

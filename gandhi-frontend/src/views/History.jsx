@@ -19,7 +19,7 @@ class History extends Component {
                 amount: 69.31
             },
             {
-                from: "Pedal",
+                from: "Trotrlio",
                 from_address: "0x123asd123123",
                 to: "Tosho",
                 to_address: "0x41231fhgd",
@@ -28,7 +28,7 @@ class History extends Component {
             {
                 from: "Kradec na kolela",
                 from_address: "0x123asd123123",
-                to: "Molq",
+                to: "Zorko",
                 to_address: "0x41231fhgd",
                 amount: 899
             }
