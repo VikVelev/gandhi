@@ -48,17 +48,16 @@ function parseBlock(block) {
     let transactions = {}
     block.forEach((tx) => {
         console.log(tx)
-        let transfer = {
+        let transfer = [{
             "address": tx.to,
             "value": parseInt(tx.amount)
+        }]
+
+        transactions[tx.from] = {
+            "sender": tx.from,
+            "transfers": transfer
         }
 
-        let transactions = { [tx.from]:{
-            "sender": tx.from,
-            "transfers": transfer,
-        }}
-
-        parsedBlock = {"timestamp": 0, "number": 0, "author": tx.from, "transactions": transactions}
     })
     
     console.log(transactions)
