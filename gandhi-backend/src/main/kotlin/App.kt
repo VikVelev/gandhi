@@ -71,7 +71,7 @@ fun main() {
 
     DataStore.ignite.services().deployClusterSingleton("BlockProcessor", BlockProcessor())
 
-    
+
 //    //heat up
 //    for(i in 0 .. 5) {
 //        if(i % 2 == 0) {
@@ -90,15 +90,15 @@ fun main() {
 //
 //    }
 
-//    var t = System.nanoTime()
-//    for(i in 0 .. 60) {
-//        if(i % 2 == 0) {
-//            testA()
-//        }else{
-//            testB()
-//        }
-//    }
-//    println("   Elapsed time: ${(System.nanoTime() - t) / 1000000.0 }")
+    var t = System.nanoTime()
+    for(i in 0 .. 60) {
+        if(i % 2 == 0) {
+            testA()
+        }else{
+            testB()
+        }
+    }
+    println("   Elapsed time: ${(System.nanoTime() - t) / 1000000.0 }")
 
 
     embeddedServer(Netty, 8080) { module(); routes() }.start(wait = false)

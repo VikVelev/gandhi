@@ -5,40 +5,40 @@ import axios from 'axios'
 
 const friendOptions = [
     {
-      key: 'Jenny Hess',
-      text: 'Jenny Hess',
-      value: 'Jenny Hess',
+      key: 'user1',
+      text: 'user1',
+      value: 'user1',
       icon: 'user',
     },
     {
-      key: 'Elliot Fu',
-      text: 'Elliot Fu',
-      value: 'Elliot Fu',
+      key: 'user2',
+      text: 'user2',
+      value: 'user2',
       icon: 'user',
     },
     {
-      key: 'Stevie Feliciano',
-      text: 'Stevie Feliciano',
-      value: 'Stevie Feliciano',
-      icon: 'user',
+        key: 'user3',
+        text: 'user3',
+        value: 'user3',
+        icon: 'user',
     },
     {
-      key: 'Christian',
-      text: 'Christian',
-      value: 'Christian',
-      icon: 'user',
+        key: 'user4',
+        text: 'user4',
+        value: 'user4',
+        icon: 'user',
     },
     {
-      key: 'Matt',
-      text: 'Matt',
-      value: 'Matt',
-      icon: 'user',
+        key: 'user5',
+        text: 'user5',
+        value: 'user5',
+        icon: 'user',
     },
     {
-      key: 'Justen Kitsune',
-      text: 'Justen Kitsune',
-      value: 'Justen Kitsune',
-      icon: 'user',
+        key: 'user6',
+        text: 'user6',
+        value: 'user6',
+        icon: 'user',
     },
 ]
 
@@ -46,16 +46,16 @@ function parseBlock(block) {
 
     let parsedBlock = {}
     block.forEach((tx) => {
-        let transfer = {
+        console.log(tx)
+        let transfer = [{
             "address": tx.to,
-            "value": tx.amount
-        }
+            "value": parseInt(tx.amount)
+        }]
 
-        let transactions = [{ [tx.from]:{
+        let transactions = { [tx.from]:{
             "sender": tx.from,
-            "transfers": transfer,
-
-        }}]
+            "transfers": transfer
+        }}
 
         parsedBlock = {"timestamp": 0, "number": 0, "author": tx.from, "transactions": transactions}
     })
@@ -109,21 +109,21 @@ class Home extends Component {
                     //from_address: this.state.transaction_one_from_address,
                     to: this.state.transaction_one_to_name,
                     //to_address: this.state.transaction_one_to_address,
-                    amount: this.state.transaction_one_amount
+                    amount: parseInt(this.state.transaction_one_amount)
                 },
                 {
                     from: this.state.transaction_two_from_name,
                     //from_address: this.state.transaction_two_from_address,
                     to: this.state.transaction_two_to_name,
                     //to_address: this.state.transaction_two_to_address,
-                    amount: this.state.transaction_two_amount
+                    amount: parseInt(this.state.transaction_two_amount)
                 },
                 {
                     from: this.state.transaction_three_from_name,
                     //from_address: this.state.transaction_three_from_address,
                     to: this.state.transaction_three_to_name,
                     //to_address: this.state.transaction_three_to_address,
-                    amount: this.state.transaction_three_amount
+                    amount: parseInt(this.state.transaction_three_amount)
                 },
             ],
         }
