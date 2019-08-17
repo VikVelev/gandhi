@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Button, Dropdown, Divider, Modal, Image, Header } from 'semantic-ui-react';
-
+import { Input, Button, Dropdown, Divider, Modal, Header } from 'semantic-ui-react';
+import axios from 'axios'
 // import { Participants } from '../components/Participants'
 
 const friendOptions = [
@@ -44,7 +44,29 @@ const friendOptions = [
 
 
 
+function transfers_to_transactions(transfers, sender) {
+    return {[sender]: { "sender": sender, "transfers": transfers } }
+}
+
+function transactions_to_block(transactions) {
+    return {"timestamp": 0, "number": 0, "author": "pesho", "transactions": transactions}
+}
+
+function pesho_to_all(num_of_accounts) {
+    let transfers = []
+    for(let i=0; i<num_of_accounts; i++) {
+        transfers.push({"address": "ACCOUNT"+i, "value": 1, "state": 0})
+    }
+
+    return transactions_to_block(transfers_to_transactions(transfers, "pesho"))
+}
+
+function parseBlock(block) {
+    
+}
+
 class Home extends Component {
+    
 
     state = {
         transaction_one_from_name: "",
@@ -112,6 +134,14 @@ class Home extends Component {
         console.log(block)
 
         //Enable the modal
+        axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block)).then(
+            (res) => {
+                console.log(`statusCode: ${res.statusCode}`)
+                console.log(res)
+        }).catch((error) => {
+            console.error(error)
+        })
+
         this.show('blurring')()
     }
 

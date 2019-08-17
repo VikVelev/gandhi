@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Segment, Grid, Form, Button, Divider, Icon } from 'semantic-ui-react';
+import { Segment, Grid, Divider, Icon } from 'semantic-ui-react';
 
 
 class TransactionItem extends Component {
-    render() { 
+    render() {
         return (
             <Segment placeholder className="history_transaction">
                 <Grid columns={2} relaxed='very' className="history_transaction_column">

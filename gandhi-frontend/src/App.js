@@ -3,7 +3,6 @@ import { Route, BrowserRouter as Router } from 'react-router-dom'
 
 import Navbar from './components/Navbar'
 
-import Friends from './views/Friends'
 import Home from './views/Home'
 import History from './views/History'
 

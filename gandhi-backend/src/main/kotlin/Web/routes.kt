@@ -74,8 +74,12 @@ fun Application.routes() {
             get("/{id}") {
                 call.respond(DataStore.blocks.getAsync(call.parameters["id"]!!.toLong()).await())
             }
-            get("/latest") {
-                call.respond(DataStore.blocks.getAsync(DataStore.counter.get() - 1).await())
+            get("/latest/{count?}") {
+                call.respond(DataStore.blocks.getAsync(DataStore.counter.get() - 1).await().transactions.flatMap {
+                    it.value.transfers.map { transfer ->
+                        mapOf("from" to it.value.sender, "to" to transfer.address, "amount" to transfer.value.toLong())
+                    }
+                }.take( call.parameters["count"]?.toInt() ?: 10 ))
             }
         }
 

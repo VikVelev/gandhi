@@ -1,43 +1,48 @@
 import React, { Component } from 'react';
 import TransactionItem from '../components/Transaction'
+import axios from "axios"
+
 
 class History extends Component {
-    state = { 
+    state = {
         transactions: [
             {
-                from: "Ivan",
-                from_address: "0x123asd123123",
-                to: "Dimo",
-                to_address: "0x41231fhgd",
-                amount: 15.2
+                from: "#############",
+                to: "##############",
+                amount: 1
+            },{
+                from: "#############",
+                to: "##############",
+                amount: 1
+            },            {
+                from: "#############",
+                to: "##############",
+                amount: 1
             },
             {
-                from: "Pesho",
-                from_address: "0x123asd123123",
-                to: "Gosho",
-                to_address: "0x41231fhgd",
-                amount: 69.31
+                from: "#############",
+                to: "##############",
+                amount: 1
             },
             {
-                from: "Trotrlio",
-                from_address: "0x123asd123123",
-                to: "Tosho",
-                to_address: "0x41231fhgd",
-                amount: 123.2
+                from: "#############",
+                to: "##############",
+                amount: 1
             },
-            {
-                from: "Kradec na kolela",
-                from_address: "0x123asd123123",
-                to: "Zorko",
-                to_address: "0x41231fhgd",
-                amount: 899
-            }
+            
+            
         ]
          
     }
 
     constructor(props) {
         super(props)
+
+        setTimeout(async () => {
+            let { data } = await axios.get("http://127.0.0.1:8080/transactions/latest/25")
+            this.setState({ transactions: data })
+        }, 0)
+
         //transaction = Query here
     }
 
