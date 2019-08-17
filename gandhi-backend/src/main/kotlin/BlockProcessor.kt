@@ -46,7 +46,10 @@ class BlockProcessor : Service {
 				val results = CompletableFuture.allOf(
 					*block.transactions.map {
 						DataStore.ignite.compute().affinityCallAsync(DataStore.balances.name, it.key) {
-							var current = DataStore.balances.get(it.key)
+							var current = BigInteger.ZERO
+							if(DataStore.balances.containsKey(it.key)){
+								current = DataStore.balances.get(it.key)
+							}
 
 							for (transfer in it.value.transfers) {
 								if( block.transactions.containsKey(transfer.address) ) {
@@ -57,12 +60,18 @@ class BlockProcessor : Service {
 								if(current >= transfer.value) {
 									current -= transfer.value
 
+									if(DataStore.balances.containsKey(transfer.address)) {
+										val balance = DataStore.balances.get(transfer.address)
+										DataStore.balances.replace(transfer.address, balance, balance + transfer.value)
+									}else{
+										DataStore.balances.put(transfer.address, transfer.value)
+									}
+
 								}else{
 //									transfer.state = TransferState.Failed
 									break;
 								}
 							}
-
 
 							println("Transaction: ${it.key}")
 						}.toCompletableFuture()
