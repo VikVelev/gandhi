@@ -10,24 +10,39 @@ import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.*
 import org.apache.ignite.cache.query.ScanQuery
+import org.apache.ignite.lang.IgniteFuture
 import java.util.*
+import java.util.concurrent.CompletableFuture
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
+
+suspend fun <V> IgniteFuture<V>.await(): V {
+    return suspendCoroutine { continuation ->
+        this.listen { fut ->
+            try {
+                val res = fut.get();
+                continuation.resume(res);
+            }catch(e: Exception){
+                continuation.resumeWithException(e);
+            }
+        }
+    }
+}
 
 fun Application.routes() {
 
     install(Routing) {
 
 //        get("/top/{count}/{time?}") {
-        get("/") {
 
-            call.respond(DataStore.blocks.query(ScanQuery<Long, Block>()).map { it.value })
-
-        }
 
         route("blocks") {
 
             get("/{id}") {
 
-                call.respond(DataStore.blocks.get(call.parameters["id"]!!.toLong()))
+                call.respond(DataStore.blocks.getAsync(call.parameters["id"]!!.toLong()).await())
             }
 
             post("/submit") {
@@ -35,17 +50,16 @@ fun Application.routes() {
 
                 block.number = DataStore.nextBlock()
                 block.timestamp = Date().time
-                DataStore.blocks.put(block.number, block);
+                DataStore.blocks.putAsync(block.number, block).await()
 
-                call.respondText("post received")
-
+                call.respond(mapOf("number" to block.number, "timestamp" to block.timestamp))
             }
 
         }
 
         route("balance") {
             get("/{id}") {
-                call.respond(DataStore.balances.get(call.parameters["id"]))
+                call.respond(DataStore.balances.getAsync(call.parameters["id"]).await())
             }
 
             get("/") {
@@ -54,7 +68,15 @@ fun Application.routes() {
         }
 
         route("transactions") {
-
+            get("/") {
+                call.respond(DataStore.blocks.query(ScanQuery<Long, Block>()).map { it.value })
+            }
+            get("/{id}") {
+                call.respond(DataStore.blocks.getAsync(call.parameters["id"]!!.toLong()).await())
+            }
+            get("/latest") {
+                call.respond(DataStore.blocks.getAsync(DataStore.counter.get() - 1).await())
+            }
         }
 
     }

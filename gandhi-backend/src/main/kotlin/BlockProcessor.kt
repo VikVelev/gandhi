@@ -73,18 +73,18 @@ class BlockProcessor : Service {
 
 								}else{
 //									transfer.state = TransferState.Failed
+									println("POOR: ${it.key}")
 									break;
 								}
 							}
 
 							DataStore.balances.put(it.key, current)
-//							println("Transaction: ${it.key}")
 						}.toCompletableFuture()
 					}.toTypedArray()
-				)
+				).join()
 
 
-				println(" Elapsed time: ${(System.nanoTime() - time) / 1000000.0 }")
+				println("\n Elapsed time: ${(System.nanoTime() - time) / 1000000.0 }")
 
 			}
 		}

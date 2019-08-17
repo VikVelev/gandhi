@@ -8,6 +8,7 @@ import org.apache.ignite.stream.StreamVisitor
 import java.math.BigInteger
 import java.nio.file.Paths
 import java.util.*
+import kotlin.random.Random
 
 
 object DataStore {
@@ -33,5 +34,7 @@ object DataStore {
     var senders: IgniteCache<Pair<Long, BigInteger>, Boolean> = ignite.getOrCreateCache("Senders")
 
     var balances: IgniteCache<String, BigInteger> = ignite.getOrCreateCache("Balances")
+
+    var random = Random(Date().time)
 }
 
