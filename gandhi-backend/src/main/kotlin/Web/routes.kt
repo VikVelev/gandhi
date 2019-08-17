@@ -19,7 +19,7 @@ fun Application.routes() {
 //        get("/top/{count}/{time?}") {
         get("/") {
 
-            call.respond(DataStore.blocks.query(ScanQuery<Long, Block>()).map { Pair(it.key, it.value) })
+            call.respond(DataStore.blocks.query(ScanQuery<Long, Block>()).map { it.value })
 
         }
 
