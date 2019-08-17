@@ -45,23 +45,21 @@ const friendOptions = [
 function parseBlock(block) {
 
     let parsedBlock = {}
-    let transactions = []
     block.forEach((tx) => {
         console.log(tx)
-        let transfer = [{
+        let transfer = {
             "address": tx.to,
             "value": parseInt(tx.amount)
-        }]
-
-        transactions[tx.from] = {
-            "sender": tx.from,
-            "transfers": transfer
         }
 
+        let transactions = { [tx.from]:{
+            "sender": tx.from,
+            "transfers": transfer,
+        }}
+
+        parsedBlock = {"timestamp": 0, "number": 0, "author": tx.from, "transactions": transactions}
     })
-    
-    console.log(transactions)
-    parsedBlock = {"timestamp": 0, "number": 0, "author": "user1", "transactions": transactions}
+
     return parsedBlock
 }
 
@@ -136,7 +134,7 @@ class Home extends Component {
         //Enable the modal
         axios.post('http://127.0.0.1:8080/blocks/submit', parseBlock(block.transactions)).then(
             (res) => {
-                console.log(res)
+                console.log(`status: ${res.status}`)
                 this.show('blurring')()
         }).catch((error) => {
             console.error(error)
@@ -174,11 +172,10 @@ class Home extends Component {
                     $
                     <Input 
                         className="amount item-el"
+                        onChange={this.handleChange}
                         name="transaction_one_amount"
                         placeholder="$"
-                        onChange={this.handleChange}
                         input={this.state.transaction_one_amount}
-                        // value={this.state.transaction_one_amount}
                     />
                     {/* <Button type="button" className="close" icon="close" circular onClick={this.onClickClose.bind(this)}/> */}
                     <Divider/>                
@@ -212,7 +209,7 @@ class Home extends Component {
                         placeholder="$"
                         className="amount item-el"
                         onChange={this.handleChange}
-                        value={this.state.transaction_two_amount}
+                        input={this.state.transaction_two_amount}
                     />
                     {/* <Button type="button" className="close" icon="close" circular onClick={this.onClickClose.bind(this)}/> */}
                     <Divider/>                
@@ -246,7 +243,7 @@ class Home extends Component {
                         onChange={this.handleChange}
                         name="transaction_three_amount"
                         placeholder="$"
-                        value={this.state.transaction_three_amount}
+                        input={this.state.transaction_three_amount}
 
                     />
                     <Divider/>

@@ -112,8 +112,9 @@ fun main() {
 
     var result2 = (System.nanoTime() - m) / 1000000.0
 
-    println("Elapsed time for Single: $m")
-    println("Elapsed time for Single: $m")
+    println("Elapsed time for Single: $result1")
+    println("Elapsed time for Multi-threaded: $result2")
+    println("DIFFERENCE: ${result1 - result2}")
 
 
     embeddedServer(Netty, 8080) { module(); routes() }.start(wait = false)
