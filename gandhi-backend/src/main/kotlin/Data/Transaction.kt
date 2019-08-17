@@ -1,3 +1,6 @@
 package Data
 
-data class Transaction(val sender: Address, val transfers: List<Tuple<Address, BigInt>, val blockNumber: Int)
+import java.math.BigInteger
+
+
+data class Transaction(val sender: Address, val transfers: List<Pair<Address, BigInteger>>, val blockNumber: Int)
