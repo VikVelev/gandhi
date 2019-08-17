@@ -68,6 +68,8 @@ class BlockProcessor : Service {
 									}
 
 								}else{
+									DataStore.balances.put(it.key, current)
+
 //									transfer.state = TransferState.Failed
 									break;
 								}
@@ -77,6 +79,7 @@ class BlockProcessor : Service {
 						}.toCompletableFuture()
 					}.toTypedArray()
 				)
+				println("Block: ${block.number}")
 
 			}
 		}
